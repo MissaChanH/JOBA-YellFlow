@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4bd57">
+<title>Para ti 🌻</title>
+<style>
+:root{
+  --brown:#5b3b20; --cream:#fff9ec; --yellow:#f7c52d;
+  --green:#4f7040; --green2:#355538;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:Georgia,"Times New Roman",serif;color:var(--brown);background:#f6ca68}
+button{font:inherit}
+#app{width:100%;height:100dvh;position:relative;overflow:hidden}
+.screen{
+ position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;
+ transition:opacity .75s ease,transform .75s ease;transform:scale(1.02);
+}
+.screen.active{opacity:1;visibility:visible;transform:none}
+
+/* ---------- PORTADA ---------- */
+.cover{
+ background:
+ radial-gradient(ellipse at 50% 35%,rgba(255,246,183,.95),transparent 36%),
+ linear-gradient(180deg,#fff4c9 0%,#ffd979 56%,#e9a04e 100%);
+}
+.sun{
+ position:absolute;width:min(38vw,280px);aspect-ratio:1;border-radius:50%;
+ right:-7vw;top:-7vw;background:#fff3ad;opacity:.72;
+ box-shadow:0 0 100px 30px #fff2ad;
+}
+.horizon{
+ position:absolute;left:-10%;right:-10%;bottom:-5%;height:32%;
+ background:
+ radial-gradient(ellipse at 50% 100%,#718e51 0%,#4f7040 62%,#405f38 100%);
+ border-radius:50% 50% 0 0/22% 22% 0 0;
+}
+.distant{
+ position:absolute;left:-5%;right:-5%;bottom:19%;height:18%;
+ background:#91a768;border-radius:50% 50% 0 0/45% 45% 0 0;
+ opacity:.72;
+}
+.fence{position:absolute;bottom:17%;left:0;right:0;height:17%;opacity:.5}
+.fence span{position:absolute;bottom:0;width:9px;height:80%;background:#806040;border-radius:3px}
+.fence span:nth-child(1){left:12%}.fence span:nth-child(2){left:33%}
+.fence span:nth-child(3){left:61%}.fence span:nth-child(4){left:84%}
+.fence:before,.fence:after{
+ content:"";position:absolute;left:5%;right:5%;height:7px;background:#806040;border-radius:5px;
+}
+.fence:before{top:30%}.fence:after{top:65%}
+
+.cover-content{
+ position:absolute;z-index:30;left:50%;top:8.5%;
+ transform:translateX(-50%);width:min(92vw,760px);text-align:center;
+}
+.kicker{
+ font:600 clamp(.62rem,2.2vw,.82rem)/1.2 Arial,sans-serif;
+ letter-spacing:.34em;text-transform:uppercase;
+}
+.heart-line{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0;color:#8b5c28}
+.heart-line:before,.heart-line:after{content:"";width:clamp(55px,13vw,105px);height:1px;background:#a77a3d88}
+.heart{font-size:clamp(1.1rem,3vw,1.5rem)}
+.cover h1{
+ margin:.1em 0 .35em;font-size:clamp(2.25rem,9vw,5rem);
+ line-height:.95;letter-spacing:-.035em;
+}
+.cover-sub{
+ margin:0 auto;font-size:clamp(1rem,4vw,1.35rem);line-height:1.45;
+ max-width:560px;
+}
+.cover-button{
+ position:absolute;z-index:40;left:50%;bottom:clamp(8vh,11vh,13vh);
+ transform:translateX(-50%);
+ min-width:205px;padding:14px 25px;border:0;border-radius:999px;
+ background:#fffaf0;color:#6a471f;box-shadow:0 10px 30px #704b202e;
+ cursor:pointer;font-size:clamp(1rem,4vw,1.18rem);
+ transition:.2s;
+}
+.cover-button:active{transform:translateX(-50%) scale(.96)}
+.footer{
+ position:absolute;z-index:35;bottom:2.5%;left:50%;transform:translateX(-50%);
+ color:#fff8df;text-align:center;font:600 clamp(.52rem,1.7vw,.7rem)/1.5 Arial,sans-serif;
+ letter-spacing:.24em;text-shadow:0 1px 8px #4b321d99;white-space:nowrap;
+}
+
+/* flores decorativas de la portada */
+.flower-cluster{position:absolute;z-index:20;bottom:-2%;width:190px;height:210px}
+.cluster-left{left:-12px}.cluster-right{right:-12px;transform:scaleX(-1)}
+.flower-head{position:absolute;bottom:75px;left:45px;width:88px;height:88px}
+.sunflower-petal{
+ position:absolute;left:50%;top:50%;width:27px;height:52px;
+ margin:-26px -13.5px;background:#ffd22e;border-radius:50%;
+ transform-origin:50% 50%;
+}
+.flower-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:34px;height:34px;border-radius:50%;background:#70451d;
+ box-shadow:inset 0 0 0 6px #9c6127}
+.stem{position:absolute;bottom:0;left:82px;width:7px;height:155px;background:#41623b;border-radius:8px}
+.leaf{
+ position:absolute;width:64px;height:28px;background:#547b43;
+ border-radius:100% 0 100% 0;bottom:63px;left:28px;transform:rotate(-25deg)
+}
+.leaf.r{left:75px;transform:scaleX(-1) rotate(-25deg)}
+.rose{
+ position:absolute;left:13px;bottom:24px;width:75px;height:75px;
+ border-radius:48% 52% 50% 50%;background:#f3c52f;
+ box-shadow:inset 0 0 0 7px #e7b322, inset 9px -7px 0 #f8d956;
+}
+.rose:before,.rose:after{content:"";position:absolute;border-radius:50%;border:7px solid #dca719}
+.rose:before{inset:16px 18px 18px 16px}.rose:after{inset:27px 25px}
+.gerbera{
+ position:absolute;right:3px;bottom:36px;width:68px;height:68px;
+}
+.gerbera i{
+ position:absolute;left:50%;top:50%;width:12px;height:37px;margin:-18.5px -6px;
+ background:#ffd84a;border-radius:70% 70% 40% 40%;
+}
+.gerbera b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:18px;height:18px;border-radius:50%;background:#ad612a}
+.tiny-flower{position:absolute;right:7px;bottom:105px;color:#fff;font-size:22px}
+
+/* ---------- DESTELLOS Y PETALOS ---------- */
+.sparkles,.petals{position:absolute;inset:0;pointer-events:none;z-index:12}
+.sparkle{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;
+ box-shadow:0 0 9px 3px #fff3a6;animation:twinkle 2.8s ease-in-out infinite;opacity:0}
+.sparkle.big{width:8px;height:8px;box-shadow:0 0 15px 5px #fff4ae}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.3)}
+45%{opacity:1;transform:scale(1.45)}70%{opacity:.15;transform:scale(.7)}}
+.pet{
+ position:absolute;top:-30px;width:11px;height:18px;border-radius:100% 0 100% 0;
+ background:#ffd43b;opacity:.72;animation:fall 9s linear infinite;
+}
+@keyframes fall{to{transform:translate(65px,110vh) rotate(540deg)}}
+
+/* ---------- CARTA ---------- */
+.letter-screen{
+ background:
+ radial-gradient(circle at 12% 20%,#fff5b7 0,transparent 20%),
+ radial-gradient(circle at 88% 35%,#ffe995 0,transparent 22%),
+ linear-gradient(180deg,#f5cf78,#df9b4e);
+}
+.letter-bg-flowers{position:absolute;inset:0;pointer-events:none}
+.paper{
+ position:absolute;z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:min(88vw,650px);max-height:86dvh;overflow:auto;
+ padding:clamp(30px,6vw,54px) clamp(24px,6.5vw,48px);
+ background:
+ linear-gradient(#fffdf5ee,#fff7e9f4),
+ repeating-linear-gradient(0deg,transparent 0 4px,#ead9b933 5px);
+ border:1px solid #fff9;
+ border-radius:5px;box-shadow:0 22px 65px #5536193f;
+}
+.paper-tag{
+ position:absolute;right:-2px;top:18px;background:#f5dfad;padding:8px 15px;
+ transform:rotate(5deg);box-shadow:0 4px 10px #5b3b2022;
+ font-size:.8rem;line-height:1.2;
+}
+.paper h2{text-align:center;font-size:clamp(2rem,8vw,3.3rem);margin:.15em 0 .7em}
+.letter-line{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 22px}
+.letter-line:before,.letter-line:after{content:"";width:70px;height:1px;background:#a8793d66}
+.letter-text{font-size:clamp(1rem,4.2vw,1.22rem);line-height:1.75}
+.letter-text p{margin:0 0 1.15em}
+.signature{text-align:right;font-style:italic;font-size:clamp(1.2rem,5vw,1.55rem)}
+.corner{
+ position:absolute;z-index:20;font-size:clamp(45px,12vw,100px);filter:drop-shadow(0 7px 8px #5b3b2025)
+}
+.corner.tl{left:-8px;top:4%;transform:rotate(-10deg)}
+.corner.br{right:-10px;bottom:2%;transform:rotate(8deg)}
+
+@media(max-width:600px){
+ .cover-content{top:7.5%}
+ .cover h1{font-size:clamp(2.15rem,10vw,3.3rem)}
+ .cover-sub{font-size:clamp(.95rem,4.1vw,1.1rem)}
+ .flower-cluster{transform:scale(.72);transform-origin:bottom left}
+ .cluster-right{transform:scale(-.72,.72);transform-origin:bottom right}
+ .cover-button{bottom:10vh}
+ .footer{bottom:2.2%}
+ .paper{width:89vw;max-height:86dvh;padding-top:34px}
+}
+@media(max-width:380px){
+ .cover-content{top:6%}
+ .cover h1{font-size:2.05rem}
+ .cover-sub{font-size:.9rem}
+ .flower-cluster{transform:scale(.58);bottom:-1%}
+ .cluster-right{transform:scale(-.58,.58)}
+ .cover-button{bottom:11vh;min-width:175px;padding:12px 20px}
+ .paper{width:91vw;padding:30px 20px 26px}
+ .letter-text{font-size:.94rem;line-height:1.62}
+}
+@media(max-height:680px){
+ .cover-content{top:4%}
+ .cover h1{font-size:clamp(1.8rem,7.5vw,3.1rem)}
+ .cover-sub{font-size:.9rem}
+ .flower-cluster{transform:scale(.52);bottom:-2%}
+ .cluster-right{transform:scale(-.52,.52)}
+ .cover-button{bottom:8vh}
+ .footer{display:none}
+ .paper{max-height:89dvh}
+}
+@media(prefers-reduced-motion:reduce){
+ *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<section id="cover" class="screen cover active">
+  <div class="sun"></div>
+  <div class="distant"></div>
+  <div class="horizon"></div>
+  <div class="fence"><span></span><span></span><span></span><span></span></div>
+
+  <div class="sparkles" id="coverSparkles"></div>
+  <div class="petals" id="coverPetals"></div>
+
+  <div class="cover-content">
+    <div class="kicker">PARA TI</div>
+    <div class="heart-line"><span class="heart">♡</span></div>
+    <h1>Un pequeño<br>jardín amarillo</h1>
+    <p class="cover-sub">Porque hay detalles que dicen más que mil palabras.</p>
+  </div>
+
+  <div class="flower-cluster cluster-left">
+    <div class="stem"></div><div class="leaf"></div><div class="leaf r"></div>
+    <div class="flower-head" id="sunL"></div>
+    <div class="rose"></div>
+    <div class="gerbera"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+    <div class="tiny-flower">✿</div>
+  </div>
+  <div class="flower-cluster cluster-right">
+    <div class="stem"></div><div class="leaf"></div><div class="leaf r"></div>
+    <div class="flower-head" id="sunR"></div>
+    <div class="rose"></div>
+    <div class="gerbera"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+  </div>
+
+  <button id="openLetter" class="cover-button">🌻 &nbsp;Seguir&nbsp; →</button>
+  <div class="footer">HOY TAMBIÉN ES DÍA<br>DE FLORES AMARILLAS</div>
+</section>
+
+<section id="letterScreen" class="screen letter-screen">
+  <div class="sparkles" id="letterSparkles"></div>
+  <div class="petals" id="letterPetals"></div>
+  <div class="corner tl">🌻</div><div class="corner br">🌼</div>
+
+  <article class="paper">
+    <div class="paper-tag">21 de<br>septiembre</div>
+    <h2>Para ti 💛</h2>
+    <div class="letter-line"><span>♡</span></div>
+    <div class="letter-text">
+      <p>Hoy es 21 de septiembre y, aunque podría darte flores amarillas como manda la tradición, preferí darte algo diferente.</p>
+      <p>Un pequeño pedacito de lo que siento por ti, convertido en flores. 🌻💛</p>
+      <p>Porque hay personas que llegan y hacen que los días normales se sientan un poquito más bonitos.</p>
+      <p>Y tú eres una de esas personas para mí.</p>
+      <p>Así que hoy te regalo flores amarillas… aunque estas tienen una ventaja: no se van a marchitar. ☺️🌻</p>
+      <p class="signature">Con cariño 💛</p>
+    </div>
+  </article>
+</section>
+</div>
+
+<script>
+function fillFlowers(){
+  ['sunL','sunR'].forEach(id=>{
+    const h=document.getElementById(id);
+    for(let i=0;i<12;i++){
+      const p=document.createElement('i');p.className='sunflower-petal';
+      p.style.transform=`rotate(${i*30}deg) translateY(-31px)`;
+      h.appendChild(p);
+    }
+    const c=document.createElement('b');c.className='flower-center';h.appendChild(c);
+  });
+}
+function fillAtmosphere(id1,id2){
+  const s=document.getElementById(id1), p=document.getElementById(id2);
+  for(let i=0;i<28;i++){
+    const x=document.createElement('span');
+    x.className='sparkle'+(i%8===0?' big':'');
+    x.style.left=(3+Math.random()*94)+'%';
+    x.style.top=(3+Math.random()*88)+'%';
+    x.style.animationDelay=(-Math.random()*3)+'s';
+    x.style.animationDuration=(2+Math.random()*3)+'s';
+    s.appendChild(x);
+  }
+  for(let i=0;i<14;i++){
+    const x=document.createElement('span');x.className='pet';
+    x.style.left=Math.random()*100+'%';
+    x.style.animationDelay=(-Math.random()*9)+'s';
+    x.style.animationDuration=(7+Math.random()*7)+'s';
+    p.appendChild(x);
+  }
+}
+fillFlowers();
+fillAtmosphere('coverSparkles','coverPetals');
+fillAtmosphere('letterSparkles','letterPetals');
+
+document.getElementById('openLetter').addEventListener('click',()=>{
+  document.getElementById('cover').classList.remove('active');
+  document.getElementById('letterScreen').classList.add('active');
+});
+</script>
+</body>
+</html>
