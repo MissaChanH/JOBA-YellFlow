@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f2c45b">
+<title>Un pequeño jardín amarillo 🌻</title>
+<style>
+:root{
+  --brown:#5d3b20;
+  --cream:#fff7df;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#6a4b24}
+body{
+  font-family:Georgia,"Times New Roman",serif;
+  color:var(--brown);
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.page{
+  width:min(100%,520px);
+  margin:0 auto;
+  min-height:100dvh;
+  background:#eab95a;
+  box-shadow:0 0 50px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+
+/* First screen is intentionally scrollable. Nothing is squeezed into the
+   viewport, so "PARA TI" and the lower flowers remain visible. */
+.garden{
+  position:relative;
+  min-height:100dvh;
+  padding-bottom:26px;
+  background:#eab95a;
+}
+.garden-art{
+  display:block;
+  width:100%;
+  height:auto;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+/* Real button is outside the artwork, so the generated image contains
+   no duplicated button. */
+.continue{
+  position:relative;
+  display:block;
+  margin:-2px auto 0;
+  width:min(72%,310px);
+  min-height:64px;
+  border:0;
+  border-radius:999px;
+  background:rgba(255,249,231,.98);
+  color:var(--brown);
+  font:clamp(20px,5.2vw,28px) Georgia,"Times New Roman",serif;
+  box-shadow:0 9px 25px rgba(76,43,8,.24);
+  cursor:pointer;
+  z-index:4;
+}
+.continue:active{transform:scale(.97)}
+.continue:focus-visible{outline:3px solid #fff;outline-offset:4px}
+
+/* Moving petals and very subtle light/wind overlay. */
+.wind{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.petal{
+  position:absolute;
+  top:-8vh;
+  width:14px;height:27px;
+  border-radius:85% 20% 85% 20%;
+  background:linear-gradient(145deg,#ffe477,#e8a814);
+  opacity:.72;
+  filter:drop-shadow(0 3px 4px rgba(91,53,7,.16));
+  animation:fall linear infinite;
+}
+.petal:nth-child(1){left:8%;animation-duration:9s;animation-delay:-2s}
+.petal:nth-child(2){left:28%;animation-duration:12s;animation-delay:-7s}
+.petal:nth-child(3){left:49%;animation-duration:10s;animation-delay:-4s}
+.petal:nth-child(4){left:70%;animation-duration:11s;animation-delay:-8s}
+.petal:nth-child(5){left:88%;animation-duration:9.5s;animation-delay:-1s}
+@keyframes fall{
+  0%{transform:translate3d(0,-10vh,0) rotate(0)}
+  25%{transform:translate3d(9vw,25vh,0) rotate(95deg)}
+  50%{transform:translate3d(-6vw,52vh,0) rotate(200deg)}
+  75%{transform:translate3d(8vw,78vh,0) rotate(290deg)}
+  100%{transform:translate3d(-5vw,112vh,0) rotate(390deg)}
+}
+.light{
+  position:absolute;
+  inset:-20%;
+  background:radial-gradient(circle at 52% 42%,rgba(255,244,175,.16),transparent 25%);
+  mix-blend-mode:screen;
+  animation:light 8s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes light{
+  from{transform:translateX(-1%) scale(1)}
+  to{transform:translateX(1.5%) scale(1.03)}
+}
+
+/* Letter is a separate scrollable screen. */
+.letter{
+  display:none;
+  position:relative;
+  min-height:100dvh;
+  background:#dcae4d;
+}
+.letter.active{display:block}
+.letter img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+.back{
+  position:fixed;
+  left:50%;
+  bottom:max(18px,env(safe-area-inset-bottom));
+  transform:translateX(-50%);
+  border:0;
+  border-radius:999px;
+  padding:13px 20px;
+  background:rgba(255,249,231,.92);
+  color:var(--brown);
+  font:17px Georgia,"Times New Roman",serif;
+  box-shadow:0 7px 22px rgba(0,0,0,.2);
+}
+@media (prefers-reduced-motion:reduce){
+  .petal,.light{animation:none}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <section id="garden" class="garden" aria-label="Jardín">
+    <img class="garden-art" src="garden_scroll.jpg" alt="Jardín amarillo al atardecer">
+    <div class="wind" aria-hidden="true">
+      <span class="petal"></span><span class="petal"></span><span class="petal"></span>
+      <span class="petal"></span><span class="petal"></span>
+    </div>
+    <div class="light" aria-hidden="true"></div>
+
+    <button class="continue" type="button" onclick="openLetter()">
+      🌻&nbsp; Seguir&nbsp; →
+    </button>
+  </section>
+
+  <section id="letter" class="letter" aria-label="Carta">
+    <img src="letter_panel.jpg" alt="Carta para ti con flores amarillas">
+    <button class="back" type="button" onclick="goBack()">← Volver al jardín</button>
+  </section>
+</main>
+
+<script>
+function openLetter(){
+  document.getElementById('garden').style.display='none';
+  document.getElementById('letter').classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function goBack(){
+  document.getElementById('letter').classList.remove('active');
+  document.getElementById('garden').style.display='block';
+  window.scrollTo({top:0,behavior:'instant'});
+}
+</script>
+</body>
+</html>
