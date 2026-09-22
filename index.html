@@ -1,138 +1,185 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#f7c95b">
-<meta name="mobile-web-app-capable" content="yes">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f2c45b">
 <title>Un pequeño jardín amarillo 🌻</title>
 <style>
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #f4c65b;
-  }
+:root{
+  --gold:#f5c85c;
+  --cream:#fff7df;
+  --brown:#5d3b20;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{
+  background:#5d421f;
+  font-family:Georgia,"Times New Roman",serif;
+  -webkit-tap-highlight-color:transparent;
+}
+#app{
+  position:relative;
+  width:100%;
+  height:100dvh;
+  min-height:100svh;
+  overflow:hidden;
+  isolation:isolate;
+}
+.screen{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .7s ease;
+}
+.screen.active{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
 
-  body {
-    font-family: Georgia, "Times New Roman", serif;
-  }
+/* The artwork always keeps its original proportions.
+   "cover" crops excess area instead of stretching it. */
+.art{
+  position:absolute;
+  inset:-2%;
+  width:104%;
+  height:104%;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+  transform-origin:center center;
+  animation:breeze 10s ease-in-out infinite alternate;
+  will-change:transform;
+}
+#garden .art{background-image:url("garden_panel.jpg");background-position:center 62%}
+#letter .art{background-image:url("letter_panel.jpg");background-position:center 50%}
 
-  .stage {
-    position: relative;
-    width: 100%;
-    height: 100dvh;
-    min-height: 100svh;
-    overflow: hidden;
-    background: #f4c65b;
-  }
+@keyframes breeze{
+  0%{transform:scale(1.005) translate3d(0,0,0)}
+  50%{transform:scale(1.012) translate3d(.25%, -.2%,0)}
+  100%{transform:scale(1.006) translate3d(-.2%, .25%,0)}
+}
 
-  .screen {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: stretch;
-    justify-content: stretch;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity .65s ease, visibility .65s ease;
-  }
+/* Soft moving light, kept subtle so the text/art stays readable. */
+.glow{
+  position:absolute;
+  inset:-25%;
+  background:
+    radial-gradient(circle at 52% 36%,rgba(255,244,177,.17),transparent 20%),
+    radial-gradient(circle at 20% 75%,rgba(255,214,88,.10),transparent 23%),
+    radial-gradient(circle at 80% 55%,rgba(255,235,145,.10),transparent 22%);
+  mix-blend-mode:screen;
+  animation:lightDrift 8s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes lightDrift{
+  from{transform:translate3d(-1%,0,0) scale(1)}
+  to{transform:translate3d(1.5%,-1%,0) scale(1.04)}
+}
 
-  .screen.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
+/* Animated petals: independent from the artwork. */
+.petals{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.petal{
+  position:absolute;
+  top:-12vh;
+  width:clamp(10px,2.8vw,18px);
+  height:clamp(20px,5vw,34px);
+  border-radius:80% 15% 80% 15%;
+  background:linear-gradient(145deg,#ffe36d,#e8a914);
+  filter:drop-shadow(0 3px 4px rgba(92,54,8,.18));
+  opacity:.78;
+  animation:fall linear infinite;
+}
+.petal:nth-child(1){left:7%;animation-duration:8.5s;animation-delay:-1.2s}
+.petal:nth-child(2){left:22%;animation-duration:11s;animation-delay:-6s}
+.petal:nth-child(3){left:39%;animation-duration:9.2s;animation-delay:-3s}
+.petal:nth-child(4){left:56%;animation-duration:12s;animation-delay:-8s}
+.petal:nth-child(5){left:73%;animation-duration:9.8s;animation-delay:-4s}
+.petal:nth-child(6){left:88%;animation-duration:10.8s;animation-delay:-2s}
+@keyframes fall{
+  0%{transform:translate3d(0,-12vh,0) rotate(0deg)}
+  25%{transform:translate3d(9vw,25vh,0) rotate(100deg)}
+  50%{transform:translate3d(-7vw,52vh,0) rotate(210deg)}
+  75%{transform:translate3d(8vw,77vh,0) rotate(290deg)}
+  100%{transform:translate3d(-4vw,116vh,0) rotate(390deg)}
+}
 
-  .art {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    /* The source artwork is intentionally used as the complete visual,
-       so the programmed page stays visually faithful to the reference. */
-    background-size: 100% 100%;
-  }
+/* Real HTML button placed over the illustrated button.
+   It hides the baked-in button where necessary and remains accessible. */
+.next{
+  position:absolute;
+  left:50%;
+  bottom:max(5.4%,env(safe-area-inset-bottom));
+  transform:translateX(-50%);
+  width:min(72vw,310px);
+  height:clamp(54px,8.2vh,76px);
+  border:0;
+  border-radius:999px;
+  background:rgba(255,249,230,.97);
+  color:#5d3b20;
+  font:clamp(19px,5.2vw,28px) Georgia,"Times New Roman",serif;
+  box-shadow:0 10px 28px rgba(77,45,11,.20);
+  cursor:pointer;
+  z-index:5;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.next:active{
+  transform:translateX(-50%) scale(.96);
+  box-shadow:0 5px 15px rgba(77,45,11,.18);
+}
+.next:focus-visible{outline:3px solid #fff;outline-offset:4px}
 
-  .tap-area {
-    position: absolute;
-    left: 50%;
-    bottom: 5.3%;
-    transform: translateX(-50%);
-    width: min(76%, 330px);
-    height: clamp(54px, 8vh, 82px);
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
+@media (min-width:700px){
+  #app{
+    width:min(100vw,520px);
+    margin:0 auto;
+    box-shadow:0 0 55px rgba(0,0,0,.25);
   }
-
-  .tap-area:focus-visible {
-    outline: 3px solid rgba(255,255,255,.9);
-    outline-offset: 4px;
-  }
-
-  .letter-hit {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  @media (max-width: 360px) {
-    .tap-area {
-      width: 80%;
-      bottom: 5%;
-    }
-  }
-
-  @media (min-width: 700px) {
-    .stage {
-      max-width: 520px;
-      margin: 0 auto;
-      box-shadow: 0 0 60px rgba(83, 52, 18, .22);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .screen { transition: none; }
-  }
+}
+@media (prefers-reduced-motion:reduce){
+  .art,.glow,.petal{animation:none}
+  .screen{transition:none}
+}
 </style>
 </head>
 <body>
-<main class="stage" aria-label="Un pequeño jardín amarillo">
-  <section id="garden" class="screen active" aria-label="Jardín">
-    <div class="art" style="background-image:url('garden.webp');"></div>
-
-    <!-- Zona táctil real sobre el botón "Seguir" que aparece en la ilustración. -->
-    <button class="tap-area"
-            type="button"
-            aria-label="Seguir y abrir la carta"
-            onclick="openLetter()"></button>
+<main id="app" aria-label="Un pequeño jardín amarillo">
+  <section id="garden" class="screen active" aria-label="Jardín de flores amarillas">
+    <div class="art"></div>
+    <div class="glow"></div>
+    <div class="petals" aria-hidden="true">
+      <i class="petal"></i><i class="petal"></i><i class="petal"></i>
+      <i class="petal"></i><i class="petal"></i><i class="petal"></i>
+    </div>
+    <button class="next" type="button" onclick="openLetter()" aria-label="Abrir la carta">
+      🌻&nbsp; Seguir&nbsp; →
+    </button>
   </section>
 
   <section id="letter" class="screen" aria-label="Carta">
-    <div class="art" style="background-image:url('letter.webp');"></div>
+    <div class="art"></div>
+    <div class="glow"></div>
+    <div class="petals" aria-hidden="true">
+      <i class="petal"></i><i class="petal"></i><i class="petal"></i>
+      <i class="petal"></i><i class="petal"></i><i class="petal"></i>
+    </div>
   </section>
 </main>
 
 <script>
-  function openLetter() {
-    const garden = document.getElementById('garden');
-    const letter = document.getElementById('letter');
-
-    garden.classList.remove('active');
-    letter.classList.add('active');
-
-    // Evita que el navegador conserve el foco del botón al cambiar de pantalla.
-    document.activeElement?.blur();
-  }
+function openLetter(){
+  document.getElementById("garden").classList.remove("active");
+  document.getElementById("letter").classList.add("active");
+}
 </script>
 </body>
 </html>
